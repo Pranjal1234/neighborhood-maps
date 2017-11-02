@@ -13,8 +13,9 @@
 					<input class="filter-button" type="button" value="filter">
 				</span>
 				<hr>
-				<div class="list">
-				</div>
+				<ul class="list" data-bind="foreach: locations()">
+					<li class="location" data-bind="text: title"></li>
+				</ul>
 			</div>
 			<div id="map"></div>
 		</div>

@@ -8,10 +8,29 @@ var intLocations = [
 ];
 
 var Location = function(data) {
+	this.title = ko.observable(data.title);
+	this.lat = ko.observable(data.location.lat);
+	this.lng = ko.observable(data.location.lng);
+}
 
+function initMap() {
+	map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 40.7413549, lng: -73.9980244},
+      zoom: 13,
+      mapTypeControl: false
+    });
 }
 
 var ViewModel = function() {
+	var self = this;
+
+	this.locations = ko.observableArray([]);
+
+	intLocations.forEach(function(location) {
+		self.locations.push(new Location(location))
+	});
+
+
 
 }
 
