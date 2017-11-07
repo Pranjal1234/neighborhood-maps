@@ -9,22 +9,22 @@
 		<header> Locations </header>
 		<div class="container">
 			<div class="places-list">
-				<span><input class="text-filter" type="text">
+				<span><input class="text-filter" type="text" data-bind="textInput: searchTerm">
 					<input class="filter-button" type="button" value="filter">
 				</span>
 				<hr>
-				<ul class="list" data-bind="foreach: locations()">
-					<li class="location" data-bind="text: title"></li>
+				<ul class="list" data-bind="foreach: searchList">
+					<li class="location" data-bind="text: title, click: populateInfoWindow(marker, largeInfowindow)"></li>
 				</ul>
 			</div>
 			<div id="map"></div>
 		</div>
 	</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src= "https://maps.googleapis.com/maps/api/js?key=AIzaSyBhXu5TUdpcZQ1zkRfPE4YP0w-TAB4wc1I&v=3">
+    </script>
 	<script src="js/lib/knockout-3.2.0.js"></script>
 	<script src="js/app.js"></script>
-	<script async defer
-        src=
-        "https://maps.googleapis.com/maps/api/js?libraries=geometry,drawing&key=AIzaSyBhXu5TUdpcZQ1zkRfPE4YP0w-TAB4wc1I&v=3&callback=initMap">
-    </script>
+	
 
 </html>
