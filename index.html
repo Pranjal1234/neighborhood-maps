@@ -13,8 +13,8 @@
 					<input class="filter-button" type="button" value="filter">
 				</span>
 				<hr>
-				<ul class="list" data-bind="foreach: searchList">
-					<li class="location" data-bind="text: title, click: populateInfoWindow(marker, largeInfowindow)"></li>
+				<ul class="list" data-bind="foreach: searchList()">
+					<li class="location" data-bind="text: title, click: populateInfoWindow"></li>
 				</ul>
 			</div>
 			<div id="map"></div>
@@ -25,6 +25,4 @@
     </script>
 	<script src="js/lib/knockout-3.2.0.js"></script>
 	<script src="js/app.js"></script>
-	
-
 </html>

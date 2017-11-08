@@ -7,20 +7,10 @@ var intLocations = [
   {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
 ];
 
-function populateInfoWindow(marker,infowindow) {
-	if (infowindow.marker != marker) {
-		infowindow.setContent('Hello');
-		infowindow.marker = marker;
-		// Make sure the marker property is cleared if the infowindow is closed.
-		infowindow.addListener('closeclick', function() {
-			infowindow.marker = null;
-		});
-
-		infowindow.open(map,marker)
-	}
-}
-
 var largeInfowindow = new google.maps.InfoWindow();
+var address = "";
+
+
 
 var Location = function(data,marker) {
 	var self = this;
@@ -28,13 +18,46 @@ var Location = function(data,marker) {
 	this.title = ko.observable(data.title);
 	this.location = ko.observable(data.location);
 	this.marker = marker;
+	this.address = "";
 
-	self.marker.addListener('click', function() {
-		populateInfoWindow(self.marker, largeInfowindow);
+	this.marker.addListener('click', function() {
+		self.populateInfoWindow();
 	});
+
+	this.populateInfoWindow = function() {
+	
+		if (largeInfowindow.marker != this.marker) {
+			largeInfowindow.setContent('');
+			largeInfowindow.marker = this.marker;
+			
+			largeInfowindow.addListener('closeclick', function() {
+				largeInfowindow.marker = null;
+			});
+			
+			var url = "https://api.foursquare.com/v2/venues/search?ll=" + self.marker.position.lat() + "," + self.marker.position.lng() + "&radius=100&query=coffee&client_id=OAIH0OFTDDDNP4HTII3HF2EJAKCHCUFQQS5XODSYUEYBCIBL&client_secret=EBIUKBC44SJO1LLYHL1ECL33ICOEL542E4KP2XSTYRSLRNAN&v=20171106";
+
+			$.ajax({
+				url: url,
+				success: function(data) {
+					var html = '<div class="info-title"><strong>List of Near By Coffee Shops (100m)</strong></div><br>'
+					if (data.response.venues.length != 0) {
+						data.response.venues.forEach(function(venue){
+							html += '<div class="info-item">' + venue.name + ': ' + venue.location.address + '</div>'
+						});}
+					else {
+						html += 'Sorry, no coffee for you.';
+					}
+					largeInfowindow.setContent(html);
+			 	},
+			 	error: function() {
+
+			 	}
+			 })
+
+			largeInfowindow.open(map,this.marker);
+		}
+	}
 }
-
-
 
 
 var ViewModel = function() {
@@ -49,7 +72,7 @@ var ViewModel = function() {
 	this.searchTerm = ko.observable("");
 
 	this.searchList = ko.computed(function(){
-		var searchResult = [];
+		var searchResult = ko.observableArray([]);
 		self.locations().forEach(function(location) {
 			if (location.title().toLowerCase().indexOf(self.searchTerm().toLowerCase()) >= 0) {
 				location.marker.setMap(self.map);
@@ -67,8 +90,6 @@ var ViewModel = function() {
 			title: location.title
 		})));
 	});
-
-
 
 }
 
