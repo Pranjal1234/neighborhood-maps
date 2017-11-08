@@ -8,9 +8,6 @@ var intLocations = [
 ];
 
 var largeInfowindow = new google.maps.InfoWindow();
-var address = "";
-
-
 
 var Location = function(data,marker) {
 	var self = this;
@@ -59,7 +56,6 @@ var Location = function(data,marker) {
 	}
 }
 
-
 var ViewModel = function() {
 	var self = this;
 
@@ -87,7 +83,8 @@ var ViewModel = function() {
 	intLocations.forEach(function(location) {
 		self.locations.push(new Location(location, new google.maps.Marker({
 			position: location.location,
-			title: location.title
+			title: location.title,
+			animation: google.maps.Animation.DROP
 		})));
 	});
 
